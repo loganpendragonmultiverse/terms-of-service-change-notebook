@@ -1,0 +1,4 @@
+{
+  "before": "# Privacy\nWe store account data.\n# Billing\nRefunds are available.",
+  "after": "# Privacy\nWe store account and usage data.\n# Billing\nRefunds are unavailable after 30 days."
+}
