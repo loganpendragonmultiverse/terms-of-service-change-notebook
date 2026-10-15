@@ -22,6 +22,7 @@ def _sections(lines: list[str]) -> list[dict[str, Any]]:
     headings: list[tuple[int, int, str]] = []
     fence_char = ""
     fence_size = 0
+    paragraph: list[tuple[int, str]] = []
     for index, line in enumerate(lines):
         fence = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
         if fence_char:
@@ -32,24 +33,40 @@ def _sections(lines: list[str]) -> list[dict[str, Any]]:
                 and not fence[2].strip()
             ):
                 fence_char = ""
+            paragraph.clear()
             continue
         if fence:
             fence_char, fence_size = fence[1][0], len(fence[1])
+            paragraph.clear()
             continue
         heading = re.match(r"^ {0,3}(#{1,6})(?:[ \t]+(.*?)|[ \t]*)$", line)
         if heading:
             title = re.sub(r"[ \t]+#+[ \t]*$", "", heading[2] or "").strip()
             headings.append((index, len(heading[1]), title))
-        elif index and re.fullmatch(r" {0,3}(=+|-+)[ \t]*", line):
-            previous = lines[index - 1]
-            if (
-                previous.strip()
-                and not re.match(r"^\s*(#|`{3,}|~{3,})", previous)
-                and (not headings or headings[-1][0] != index - 1)
-            ):
+            paragraph.clear()
+            continue
+        underline = re.fullmatch(r" {0,3}(=+|-+)[ \t]*", line)
+        if underline:
+            if paragraph:
                 headings.append(
-                    (index - 1, 1 if line.lstrip().startswith("=") else 2, previous.strip())
+                    (
+                        paragraph[0][0],
+                        1 if underline[1][0] == "=" else 2,
+                        " ".join(text for _, text in paragraph),
+                    )
                 )
+            # An underline is consumed once; it cannot title a later heading.
+            paragraph.clear()
+            continue
+        thematic = re.fullmatch(
+            r" {0,3}(?:\*(?:[ \t]*\*){2,}|-(?:[ \t]*-){2,}|_(?:[ \t]*_){2,})[ \t]*",
+            line,
+        )
+        block = re.match(r"^(?: {4}|\t| {0,3}(?:>|[-+*][ \t]+|[0-9]{1,9}[.)][ \t]+))", line)
+        if not line.strip() or thematic or block:
+            paragraph.clear()
+        else:
+            paragraph[:] = [(index, line.strip())]
     result: list[dict[str, Any]] = []
     occurrences: Counter[str] = Counter()
     outline: list[tuple[int, str]] = []

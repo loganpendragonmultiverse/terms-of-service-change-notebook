@@ -1,5 +1,7 @@
 import hashlib
 
+import pytest
+
 from tos_change_notebook.core import analyze
 
 
@@ -46,3 +48,21 @@ def test_setext_headings_and_changes_spanning_sections():
     assert report["changes"][1]["before_sections"][0]["path"] == ["Title", "Sub"]
     report = analyze({"before": "# A\nx\n# B\ny", "after": "# C\nz"})
     assert [s["heading"] for s in report["changes"][0]["before_sections"]] == ["A", "B"]
+
+
+@pytest.mark.parametrize(
+    "before",
+    [
+        "Title\n---\n---\nold",
+        "Title\n===\n---\n***\n___\nold",
+        "# Title\n- item\n---\nold",
+        "# Title\n1. item\n---\nold",
+        "# Title\n* item\n***\n---\nold",
+    ],
+)
+def test_consumed_underlines_and_thematic_breaks_do_not_become_headings(before):
+    report = analyze({"before": before, "after": before.replace("old", "new")})
+    change = report["changes"][0]
+    for side in ("before_sections", "after_sections"):
+        assert [s["heading"] for s in change[side]] == ["Title"]
+        assert change[side][0]["heading_line"] == 1

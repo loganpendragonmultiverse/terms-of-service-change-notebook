@@ -2,6 +2,8 @@
 
 ## 1.1.0 - Unreleased
 
+- Keep consumed setext underlines and thematic breaks after lists out of section titles.
+
 - Attach independent before/after Markdown section context to changed source ranges.
 - Distinguish repeated headings by occurrence and line, ignore fenced headings, and retain original fingerprints.
 
