@@ -36,3 +36,7 @@ python -m build
 The project is feature-complete for its documented v1 scope. Maintenance focuses on correctness, security, compatibility, and well-supported input improvements.
 
 Part of the [Logan Pendragon Forge open-source collection](https://www.loganpendragonforge.com/open-source/). Licensed under the [MIT License](LICENSE).
+
+## Before and after section context
+
+Each change now includes `before_sections` and `after_sections` for the physical source ranges it touches. Sections record heading text, level, outline path, heading line, inclusive section range, and occurrence number for repeated heading text. ATX headings (`# Heading`) and setext headings are recognized outside backtick and tilde fences. Renamed headings retain distinct before/after labels; duplicate titles are distinguished by source location. Unsectioned text has a null heading. An empty side of an insertion/deletion has no section entries, preserving existing range conventions (`[start, start-1]` for an empty range). Source SHA-256 fingerprints and keyword categories are unchanged. This deliberately small Markdown scanner does not model every Markdown dialect or determine legal effect.

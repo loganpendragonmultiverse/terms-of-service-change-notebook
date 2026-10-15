@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "terms-of-service-change-notebook"
-version = "1.0.0"
+version = "1.1.0"
 description = "Categorize differences between two manually saved policy versions with fingerprints."
 readme = "README.md"
 requires-python = ">=3.10"
