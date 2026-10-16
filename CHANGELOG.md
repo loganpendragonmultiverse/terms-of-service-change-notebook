@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0 - Unreleased
+## 1.1.0 - 2026-10-16
 
 - Keep consumed setext underlines and thematic breaks after lists out of section titles.
 

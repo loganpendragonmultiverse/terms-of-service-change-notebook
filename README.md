@@ -4,6 +4,10 @@
 
 Categorize differences between two manually saved policy versions with fingerprints. The command uses explicit UTF-8 JSON input and produces reviewable JSON or Markdown output.
 
+## Version 1.1.0
+
+Attach independent before/after Markdown section context to changed source ranges. Distinguish repeated headings by occurrence and line, ignore fenced headings, and retain original fingerprints.
+
 ## Three-minute start
 
 ```bash
