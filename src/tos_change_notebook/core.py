@@ -10,10 +10,12 @@ from typing import Any
 PROJECT = "terms-of-service-change-notebook"
 
 
-def _require(data: dict[str, Any], key: str) -> Any:
-    value = data.get(key)
-    if value is None or value == "" or value == []:
+def _require_text(data: dict[str, Any], key: str) -> str:
+    if key not in data:
         raise ValueError(f"{key} is required")
+    value = data[key]
+    if not isinstance(value, str):
+        raise TypeError(f"{key} must be text")
     return value
 
 
@@ -116,8 +118,8 @@ def _section_context(
 
 
 def _tos_notebook(data: dict[str, Any]) -> dict[str, Any]:
-    before = str(_require(data, "before"))
-    after = str(_require(data, "after"))
+    before = _require_text(data, "before")
+    after = _require_text(data, "after")
     before_lines, after_lines = (before.splitlines(), after.splitlines())
     before_sections, after_sections = _sections(before_lines), _sections(after_lines)
     changes = []
@@ -164,6 +166,8 @@ def _tos_notebook(data: dict[str, Any]) -> dict[str, Any]:
 
 
 def analyze(data: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(data, dict):
+        raise TypeError("input must be a JSON object")
     return {"version": 1, "project": PROJECT, **_tos_notebook(data)}
 
 

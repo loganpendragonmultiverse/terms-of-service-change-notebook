@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "terms-of-service-change-notebook"
-version = "1.1.0"
+version = "1.1.1"
 description = "Categorize differences between two manually saved policy versions with fingerprints."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -35,3 +35,7 @@ omit = ["src/*/__main__.py"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--cov=tos_change_notebook --cov-branch --cov-report=term-missing --cov-fail-under=90"
+
+[tool.setuptools.data-files]
+"share/doc/terms-of-service-change-notebook" = ["README.md", "DEVELOPMENT.md", "TESTING.md", "CHANGELOG.md", "LICENSE", "CONTRIBUTING.md", "SECURITY.md"]
+"share/doc/terms-of-service-change-notebook/examples" = ["examples/sample.json"]
